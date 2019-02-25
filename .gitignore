@@ -1,0 +1,23 @@
+
+# roadhog-api-doc ignore
+/src/utils/request-temp.js
+# 忽略每一级文件夹下
+**/__pycache__   
+_roadhog-api-doc
+
+# production
+/vscode
+/venv
+
+# misc
+.DS_Store
+npm-debug.log*
+yarn-error.log
+
+/coverage
+.idea
+yarn.lock
+package-lock.json
+*bak
+jsconfig.json
+.vscode/settings.json
