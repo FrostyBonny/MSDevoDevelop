@@ -21,3 +21,6 @@ package-lock.json
 *bak
 jsconfig.json
 .vscode/settings.json
+
+# 数据库配置
+./utils/SQLconfig.py
