@@ -34,7 +34,7 @@ def create_update_sql(values):
 
 
 class MySqldb(object):
-    def __init__(self, address, port):
+    def __init__(self):
         self.db = pymysql.connect('47.107.248.108','root','WQXll,.1','flask')
 
     # 一共就四个方法，增删改查。
@@ -113,7 +113,7 @@ class MySqldb(object):
 
 
 if __name__ == '__main__':
-    db = MySqldb('123','123')
+    db = MySqldb()
     # db.insert('student',{"age":1,"name":'123'})
     # db.insert('student',{"age":2,"name":'123'})
     # db.delete('student',{"age":1})

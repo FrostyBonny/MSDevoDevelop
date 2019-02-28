@@ -1,6 +1,6 @@
 import pymysql
-from function import create_insert_sql,create_update_sql
-import SQLConfig
+from .function import create_insert_sql,create_update_sql
+from . import SQLConfig
 
 
 class MySqldb(object):
