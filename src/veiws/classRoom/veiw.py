@@ -1,9 +1,61 @@
-from flask_restful import Api, Resource, url_for
+from flask_restful import Api, Resource, url_for, abort
 from . import classRoom
+# from .parser import putPaeser, getParser
+from . import parser as allParser
+from ... import dbclient
+from flask import jsonify
+from utils.code import Code
+from utils.function import make_result
 
+table = 'classRoom'
 api = Api(classRoom)
 class ClassRoom(Resource):
-    def get(self, id):
-        return {'task': 'Say "Hello, World!"'}
+    #  获取数据
+    def get(self):
+        # print()
+        args = allParser.getParser.parse_args()
+        if args["type"] == "all":
+            data = dbclient.list_all(table)
+        else:
+            data = dbclient.list_one(table,{"id":args['id']})
+        if data is None:
+            response = make_result(data,Code.SUCCESS)
+        elif data == False:
+            response = make_result(code=Code.ERROR)
+        return response
+    
+    #  更新数据
+    def put(self):
+        args = allParser.putParser.parse_args()
+        result = dbclient.update(table,args,{"id":args["id"]})
+        if result:
+            response = make_result(code=Code.SUCCESS)
+        else:
+            response = make_result(code=Code.ERROR)
+        return response
+        # return make_response(jsonify({"test":"Ttest"}))
 
-api.add_resource(ClassRoom, '/todos/<int:id>')
+    #  新增数据
+    def post(self):
+        args = allParser.postParser.parse_args()
+        result = dbclient.insert(table,args)
+        if result:
+            response = make_result(code=Code.SUCCESS)
+        else:
+            response = make_result(code=Code.ERROR)
+        return response
+
+    
+    #  删除数据
+    def delete(self):
+        args = allParser.deleteParser.parse_args()
+        result = dbclient.delete(table,{"id":args['id']})
+        if result:
+            response = make_result(code=Code.SUCCESS)
+        else:
+            response = make_result(code=Code.ERROR)
+        return response
+
+api.add_resource(ClassRoom, '/',endpoint='classRoom')
+
+

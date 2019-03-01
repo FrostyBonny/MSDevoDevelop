@@ -24,3 +24,5 @@ jsconfig.json
 
 # 数据库配置
 /utils/SQLConfig.py
+
+/.vscode

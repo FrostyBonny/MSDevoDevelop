@@ -1,3 +1,6 @@
+from .code import Code
+from flask import jsonify, make_response
+
 def create_insert_sql(values):
     result = "("
     # result += ",".join([ str(values[i]) for i in values])
@@ -28,3 +31,11 @@ def create_update_sql(values):
         else:
             result += "," + str(i) + " = '%s'"%(values[i])            
     return result
+
+def make_result(data=None, code=Code.SUCCESS):
+    jsonData = jsonify({"code": code, "data": data, "msg": Code.msg[code]})
+    response = make_response(jsonData)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
+    response.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
+    return response
