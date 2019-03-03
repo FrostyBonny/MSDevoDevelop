@@ -1,5 +1,5 @@
 import pymysql
-from .function import create_insert_sql,create_update_sql
+from .function import create_insert_sql_values, create_update_sql, create_insert_sql_column
 from . import SQLConfig
 
 
@@ -17,17 +17,10 @@ class MySqldb(object):
             raise TypeError('values must be dict')
         if not isinstance(table,str):
             raise TypeError('table must be str')
-        cursor = self.db.cursor()        
-        #  获取表头数据，保证数据顺序
-        sql = "select COLUMN_NAME from information_schema.COLUMNS where table_name = '%s'"%(table)
-        cursor.execute(sql)
-        table_name = cursor.fetchall()
-        table_column = {}
-        for i in table_name:
-            table_column[i[0]] = ''
-        values = {**table_column,**values}
+        cursor = self.db.cursor()
         #  创建sql
-        sql = "INSERT INTO %s VALUES %s"%(table,create_insert_sql(values))
+        sql = "INSERT INTO %s%s VALUES %s"%(table,\
+            create_insert_sql_column(values),create_insert_sql_values(values))
         try:
             cursor.execute(sql)
             self.db.commit()
@@ -129,6 +122,29 @@ class MySqldb(object):
         except:
             print("list one fail")
             return False
+
+
+    def list_column(self, table, columns):
+        if not isinstance(table,str):
+            raise TypeError('table must be str')
+        if not isinstance(columns,list):
+            raise TypeError('columns must be list')
+        cursor = self.db.cursor()
+        sql = "SELECT %s FROM %s" % (",".join(columns),table)
+        print(sql)
+        try:
+            cursor.execute(sql)
+            data = cursor.fetchall()
+            columnData = []
+            for i in data:
+                columnData.append(i[0])
+            return columnData
+        except:
+            print("list one fail")
+            return False
+
+
+
 
     def close(self):
         self.db.close()

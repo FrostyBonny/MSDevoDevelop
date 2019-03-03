@@ -6,7 +6,7 @@ from utils import mysql
 
 blueprints = [
     'src.veiws.classRoom:classRoom',
-    # 'src.login:loginPrint',
+    'src.veiws.user:user',
 ]
 dbclient = mysql.MySqldb()
 
