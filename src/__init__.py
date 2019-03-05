@@ -8,8 +8,10 @@ blueprints = [
     'src.veiws.classRoom:classRoom',
     'src.veiws.user:user',
 ]
+
 dbclient = mysql.MySqldb()
 
+# __all__ = [dbclient]
 def creatapp():
     app = Flask(__name__)
     app.config['DEBUG'] = True

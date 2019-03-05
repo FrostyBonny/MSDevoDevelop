@@ -1,8 +1,10 @@
-import pymysql
 #  这是一个测试文件
-from flask import Flask
 from flask_httpauth import HTTPBasicAuth
+import time
 
-a = ['1','a','v']
+m = time.time()
+time.sleep(1)
+m_t = time.time()
 
-print(",".join(a))
+print(m,m_t)
+

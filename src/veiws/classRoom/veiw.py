@@ -14,6 +14,10 @@ class ClassRoom(Resource):
     def get(self):
         # print()
         args = allParser.getParser.parse_args()
+        verify_result = verify_token(args["token"])
+        if not verify_result:
+            return make_result(code=Code.ERROR)
+        args.pop('token')
         if args["type"] == "all":
             data = dbclient.list_all(table)
         else:
@@ -27,6 +31,10 @@ class ClassRoom(Resource):
     #  更新数据
     def put(self):
         args = allParser.putParser.parse_args()
+        verify_result = verify_token(args["token"])
+        if not verify_result:
+            return make_result(code=Code.ERROR)
+        args.pop('token')
         result = dbclient.update(table,args,{"id":args["id"]})
         if result:
             response = make_result(code=Code.SUCCESS)
@@ -38,6 +46,10 @@ class ClassRoom(Resource):
     #  新增数据
     def post(self):
         args = allParser.postParser.parse_args()
+        verify_result = verify_token(args["token"])
+        if not verify_result:
+            return make_result(code=Code.ERROR)
+        args.pop('token')
         result = dbclient.insert(table,args)
         if result:
             response = make_result(code=Code.SUCCESS)
@@ -49,6 +61,10 @@ class ClassRoom(Resource):
     #  删除数据
     def delete(self):
         args = allParser.deleteParser.parse_args()
+        verify_result = verify_token(args["token"])
+        if not verify_result:
+            return make_result(code=Code.ERROR)
+        args.pop('token')
         result = dbclient.delete(table,{"id":args['id']})
         if result:
             response = make_result(code=Code.SUCCESS)
