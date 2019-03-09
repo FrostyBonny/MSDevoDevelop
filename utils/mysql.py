@@ -115,10 +115,11 @@ class MySqldb(object):
         
         try:
             cursor.execute(sql)
+            table_data = []
             data = cursor.fetchall()
             for i in data:
-                lineData = dict(zip(table_column,list(i)))
-            return lineData
+                table_data.append(dict(zip(table_column,list(i))))
+            return table_data
         except:
             print("list one fail")
             return False
@@ -131,7 +132,6 @@ class MySqldb(object):
             raise TypeError('columns must be list')
         cursor = self.db.cursor()
         sql = "SELECT %s FROM %s" % (",".join(columns),table)
-        print(sql)
         try:
             cursor.execute(sql)
             data = cursor.fetchall()
