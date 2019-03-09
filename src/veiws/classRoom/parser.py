@@ -13,11 +13,17 @@ deleteParser.add_argument('id', type=int, help='please enter id', required=True)
 deleteParser.add_argument('token', type=str, location='headers')
 
 putParser = reqparse.RequestParser()
-putParser.add_argument('id', type=int, help='please enter id', required=True)
+# putParser =
+putParser.add_argument('id', type=str, help='please enter id')
 putParser.add_argument('total', type=int, help='please enter total')
 putParser.add_argument('arrived', type=int, help='please enter arrived')
 putParser.add_argument('name', type=str, help='please enter name')
 putParser.add_argument('token', type=str, location='headers')
+# putParser.add_argument('id',required=True)
+# putParser.add_argument('total')
+# putParser.add_argument('arrived')
+# putParser.add_argument('name')
+# putParser.add_argument('token')
 
 postParser = reqparse.RequestParser()
 # postParser.add_argument('id', type=int, help='please enter id', required=True)

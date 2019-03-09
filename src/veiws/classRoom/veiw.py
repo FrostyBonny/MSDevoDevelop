@@ -3,7 +3,7 @@ from . import classRoom
 # from .parser import putPaeser, getParser
 from . import parser as allParser
 from ... import dbclient
-from flask import jsonify
+from flask import jsonify, request
 from utils.code import Code
 from utils.function import make_result, verify_token, pagenation
 
@@ -35,17 +35,26 @@ class ClassRoom(Resource):
     #  更新数据
     def put(self):
         args = allParser.putParser.parse_args()
+        if args.id == None:
+            _t = str(request.get_data(), encoding = "utf-8")
+            _t = _t.split("&")
+            for i in _t:
+                _l = i.split("=")
+                args[_l[0]] = _l[1]
         verify_result = verify_token(args["token"])
         if not verify_result:
             return make_result(code=Code.ERROR,msg="token失效")
         args.pop('token')
+        for i in list(args.keys()):
+            if args[i] == None:
+                del args[i]
         result = dbclient.update(table,args,{"id":args["id"]})
         if result:
             response = make_result(code=Code.SUCCESS)
         else:
             response = make_result(code=Code.ERROR,msg="修改失败")
         return response
-        # return make_response(jsonify({"test":"Ttest"}))
+        return make_response(jsonify({"test":"Ttest"}))
 
     #  新增数据
     def post(self):

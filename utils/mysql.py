@@ -61,6 +61,7 @@ class MySqldb(object):
         sql = "UPDATE %s SET %s WHERE %s = '%s'"%\
             (table,create_update_sql(values),list(condition.keys())[0],condition[list(condition.keys())[0]])
         try:
+            print(sql)
             cursor.execute(sql)
             self.db.commit()
             return True
