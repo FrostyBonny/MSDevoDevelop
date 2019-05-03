@@ -5,9 +5,13 @@ from . import SQLConfig
 
 class MySqldb(object):
     def __init__(self):
-        self.db = pymysql.connect(SQLConfig.SQL_ADDRESS,SQLConfig.SQL_USERNAME,\
-            SQLConfig.SQL_PASSWORD,SQLConfig.SQL_DATABASE)
+        self.SQLConfig = SQLConfig
+        # self.db = pymysql.connect(SQLConfig.SQL_ADDRESS,SQLConfig.SQL_USERNAME,\
+        #     SQLConfig.SQL_PASSWORD,SQLConfig.SQL_DATABASE)
 
+    def connect(self):
+        self.db = pymysql.connect(self.SQLConfig.SQL_ADDRESS,self.SQLConfig.SQL_USERNAME,\
+            self.SQLConfig.SQL_PASSWORD,self.SQLConfig.SQL_DATABASE)
     # 一共就四个方法，增删改查。
     # 增，也就是insert
     # 增加一共有两个变量，一个是需要增加到哪个表里面去，另一个是数据。

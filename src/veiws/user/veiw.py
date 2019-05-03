@@ -6,12 +6,13 @@ from . import parser as allParser
 from src import dbclient
 from flask import jsonify,request
 from utils.code import Code
-from utils.function import make_result, make_token, verify_token, encode_password
+from utils.function import make_result, make_token, verify_token, encode_password,dbclient_decorate
 
 table = 'my_users'
 api = Api(user)
 class Login(Resource):
     #  登录
+    @dbclient_decorate
     def post(self):
         args = allParser.postLoginParser.parse_args()
         m_user = dbclient.list_one(table,{"username":args["username"]})
@@ -44,6 +45,7 @@ class Login(Resource):
 api.add_resource(Login, '/login',endpoint='userLogin')
 
 class Login_Out(Resource):
+    @dbclient_decorate
     def post(self):
         args = allParser.getLoginOutParser.parse_args()
         verify_result = verify_token(args["token"])
@@ -61,6 +63,7 @@ api.add_resource(Login_Out, '/loginout',endpoint='userLoginOut')
 
 class User(Resource):
     #  获取
+    @dbclient_decorate
     def get(self):
         args = allParser.getUserParser.parse_args()
         verify_result = verify_token(args["token"])
@@ -99,6 +102,7 @@ class User(Resource):
 
 
     #  更新
+    @dbclient_decorate
     def post(self):
         args = allParser.postUserParser.parse_args()
         verify_result = verify_token(args["token"])
@@ -119,6 +123,7 @@ class User(Resource):
 
 
     #  删除
+    @dbclient_decorate
     def delete(self):
         args = allParser.deleteUserParser.parse_args()
         verify_result = verify_token(args["token"])
@@ -134,6 +139,7 @@ class User(Resource):
 
 
     #  新增
+    @dbclient_decorate
     def put(self):
         args = allParser.putUserParser.parse_args()
         m_users = dbclient.list_column(table,['username'])

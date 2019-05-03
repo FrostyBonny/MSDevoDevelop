@@ -5,12 +5,13 @@ from . import parser as allParser
 from ... import dbclient
 from flask import jsonify, request
 from utils.code import Code
-from utils.function import make_result, verify_token, pagenation
+from utils.function import make_result, verify_token, pagenation, dbclient_decorate
 
 table = 'classRoom'
 api = Api(classRoom)
 class ClassRoom(Resource):
     #  获取数据
+    @dbclient_decorate
     def get(self):
         args = allParser.getParser.parse_args()
         verify_result = verify_token(args["token"])
@@ -32,8 +33,24 @@ class ClassRoom(Resource):
             response = make_result(code=Code.ERROR,msg='获取数据失败')
         return response
     
-    #  更新数据
+    #  新增数据
+    @dbclient_decorate
     def put(self):
+        args = allParser.postParser.parse_args()
+        verify_result = verify_token(args["token"])
+        if not verify_result:
+            return make_result(code=Code.ERROR)
+        args.pop('token')
+        result = dbclient.insert(table,args)
+        if result:
+            response = make_result(code=Code.SUCCESS)
+        else:
+            response = make_result(code=Code.ERROR)
+        return response
+
+    #  更新数据
+    @dbclient_decorate
+    def post(self):
         args = allParser.putParser.parse_args()
         if args.id == None:
             _t = str(request.get_data(), encoding = "utf-8")
@@ -56,22 +73,9 @@ class ClassRoom(Resource):
         return response
         return make_response(jsonify({"test":"Ttest"}))
 
-    #  新增数据
-    def post(self):
-        args = allParser.postParser.parse_args()
-        verify_result = verify_token(args["token"])
-        if not verify_result:
-            return make_result(code=Code.ERROR)
-        args.pop('token')
-        result = dbclient.insert(table,args)
-        if result:
-            response = make_result(code=Code.SUCCESS)
-        else:
-            response = make_result(code=Code.ERROR)
-        return response
-
     
     #  删除数据
+    @dbclient_decorate
     def delete(self):
         args = allParser.deleteParser.parse_args()
         verify_result = verify_token(args["token"])

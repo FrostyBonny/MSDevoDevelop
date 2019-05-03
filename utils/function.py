@@ -53,6 +53,13 @@ def create_update_sql(values):
             result += "," + str(i) + " = '%s'"%(values[i])            
     return result
 
+
+'''
+data: 返回的数据
+code：返回的状态码
+msg：返回的消息
+count：分页时用到的数据
+'''
 def make_result(data=None, code=Code.SUCCESS, msg="成功",count=None):
     # if not isinstance(data,dict) and data != None:
         # raise TypeError('data must be dict')
@@ -66,7 +73,7 @@ def make_result(data=None, code=Code.SUCCESS, msg="成功",count=None):
     # response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Methods'] = 'OPTIONS,HEAD,GET,POST'
     response.headers['Access-Control-Allow-Headers'] = 'x-requested-with'
-    response.headers['Content-Type'] = 'application/json'
+    response.headers['Content-Type'] = 'application/json'    
     return response
 
 
@@ -115,3 +122,11 @@ def pagenation(data,page,limit):
     return data[page]
     # print(data[page])
 
+# 自动连接以及关闭数据库的装饰器
+def dbclient_decorate(func):
+    def inner(*args,**kwargs):
+        src.dbclient.connect()
+        result = func(*args,**kwargs)
+        src.dbclient.close()
+        return result
+    return inner
