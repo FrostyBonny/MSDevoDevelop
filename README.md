@@ -1,5 +1,5 @@
-# Python_Flask
-python的flask后台，用于创新基金
+# MSDevelop
+python的flask后台，用于信息系统开发课程
 
 
 ### 使用
