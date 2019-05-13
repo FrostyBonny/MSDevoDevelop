@@ -25,11 +25,13 @@ class MySqldb(object):
         #  创建sql
         sql = "INSERT INTO %s%s VALUES %s"%(table,\
             create_insert_sql_column(values),create_insert_sql_values(values))
+        # print(sql)
         try:
             cursor.execute(sql)
             self.db.commit()
             return True
-        except:
+        except Exception as e:
+            print("reason：{}".format(e))
             print('insert fail')
             return False
 
@@ -43,12 +45,14 @@ class MySqldb(object):
         cursor = self.db.cursor()
         sql = "DELETE FROM %s WHERE %s = '%s'" % \
             (table,list(condition.keys())[0],condition[list(condition.keys())[0]])
+        # print(sql)
         try:
             cursor.execute(sql)
             self.db.commit()
             return True
-        except:
-            print('delete fail')
+        except Exception as e:
+            print("reason：{}".format(e))
+            print("delete fail")        
             return False
 
 
@@ -65,11 +69,12 @@ class MySqldb(object):
         sql = "UPDATE %s SET %s WHERE %s = '%s'"%\
             (table,create_update_sql(values),list(condition.keys())[0],condition[list(condition.keys())[0]])
         try:
-            print(sql)
+            # print(sql)
             cursor.execute(sql)
             self.db.commit()
             return True
-        except:
+        except Exception as e:
+            print("reason：{}".format(e))
             print("update fail")        
             return False
 
@@ -96,7 +101,8 @@ class MySqldb(object):
             for i in data:
                 table_data.append(dict(zip(table_column,list(i))))
             return table_data
-        except:
+        except Exception as e:
+            print("reason：{}".format(e))
             print('get fail')
             return False
 
@@ -125,7 +131,8 @@ class MySqldb(object):
             for i in data:
                 table_data.append(dict(zip(table_column,list(i))))
             return table_data
-        except:
+        except Exception as e:
+            print("reason：{}".format(e))
             print("list one fail")
             return False
 
@@ -137,6 +144,7 @@ class MySqldb(object):
             raise TypeError('columns must be list')
         cursor = self.db.cursor()
         sql = "SELECT %s FROM %s" % (",".join(columns),table)
+        # print(sql)
         try:
             cursor.execute(sql)
             data = cursor.fetchall()
@@ -144,8 +152,9 @@ class MySqldb(object):
             for i in data:
                 columnData.append(i[0])
             return columnData
-        except:
-            print("list one fail")
+        except Exception as e:
+            print("reason：{}".format(e))
+            print("list column fail")
             return False
 
 

@@ -8,7 +8,7 @@ from flask import jsonify,request
 from utils.code import Code
 from utils.function import make_result, make_token, verify_token, encode_password,dbclient_decorate
 
-table = 'my_users'
+table = 'm_user'
 api = Api(user)
 class Login(Resource):
     #  登录

@@ -1,5 +1,5 @@
 from flask_restful import Api, Resource, url_for, abort
-from . import classRoom
+from . import sc
 # from .parser import putPaeser, getParser
 from . import parser as allParser
 from ... import dbclient
@@ -7,9 +7,9 @@ from flask import jsonify, request
 from utils.code import Code
 from utils.function import make_result, verify_token, pagenation, dbclient_decorate
 
-table = 'classRoom'
-api = Api(classRoom)
-class ClassRoom(Resource):
+table = 'sc'
+api = Api(sc)
+class SC(Resource):
     #  获取数据
     @dbclient_decorate
     def get(self):
@@ -43,9 +43,9 @@ class ClassRoom(Resource):
         args.pop('token')
         result = dbclient.insert(table,args)
         if result:
-            response = make_result(code=Code.SUCCESS)
+            response = make_result(code=Code.SUCCESS, msg='新增成功')
         else:
-            response = make_result(code=Code.ERROR)
+            response = make_result(code=Code.ERROR, msg='新增失败')
         return response
 
     #  更新数据
@@ -86,9 +86,9 @@ class ClassRoom(Resource):
         if result:
             response = make_result(code=Code.SUCCESS)
         else:
-            response = make_result(code=Code.ERROR)
+            response = make_result(code=Code.ERROR,msg='删除失败')
         return response
 
-api.add_resource(ClassRoom, '/',endpoint='classRoom')
+api.add_resource(SC, '/',endpoint='SC')
 
 

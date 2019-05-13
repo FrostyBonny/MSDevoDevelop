@@ -9,6 +9,9 @@ from flask_cors import *
 blueprints = [
     'src.veiws.classRoom:classRoom',
     'src.veiws.user:user',
+    'src.veiws.class:my_class',
+    'src.veiws.sc:sc',
+    'src.veiws.course:course',
 ]
 
 dbclient = mysql.MySqldb()
