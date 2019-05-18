@@ -79,7 +79,9 @@ class User(Resource):
                     "id":i["id"],
                     "username":i["username"],
                     "name":i['name'],
+                    "phone":i['phone'],
                     "role":i['role'],
+                    "class":i["class"]
                 }
             response = make_result(m_result,code=Code.SUCCESS)
         else:
@@ -146,6 +148,7 @@ class User(Resource):
         if args['username'] in m_users:
             return make_result(code=Code.ERROR, msg="已经存在此用户")
         args["password"] = encode_password(args["password"])
+        # print(args)
         m_result = dbclient.insert(table,args)
         if m_result:
             response = make_result(code=Code.SUCCESS)

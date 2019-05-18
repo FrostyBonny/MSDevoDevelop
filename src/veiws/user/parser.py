@@ -18,6 +18,9 @@ putUserParser.add_argument('username', type=str, help='please enter username', r
 putUserParser.add_argument('password', type=str, help='please enter password', required=True)
 putUserParser.add_argument('role', type=str, help='please enter role', required=True)
 putUserParser.add_argument('name', type=str, help='please enter name', required=True)
+putUserParser.add_argument('class', type=str, help='please enter name', required=True)
+putUserParser.add_argument('phone', type=str, help='please enter name', required=True)
+
 
 
 postUserParser = reqparse.RequestParser()

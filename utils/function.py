@@ -82,11 +82,11 @@ def make_token():
     result['token'] = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     return result
 
-
+# 验证token
 def verify_token(token):
     if token == "ASDFGHJKL":
         return True
-    m_result = src.dbclient.list_one('my_users',{"token":token})
+    m_result = src.dbclient.list_one('m_user',{"token":token})
     if m_result:
         m_result = m_result[0]
         current_time = int(time.time())
