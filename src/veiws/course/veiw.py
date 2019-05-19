@@ -20,18 +20,27 @@ class Course(Resource):
         args.pop('token')
         if args["type"] == "all":
             data = dbclient.list_all(table)
+            length = len(data)
+            data = pagenation(data,args["page"] - 1,args["limit"])
+            if data:
+                response = make_result(data,Code.SUCCESS,count=length)
+            elif data == False:
+                response = make_result(code=Code.ERROR,msg='获取数据失败')
+            return response
         else:
-            data = dbclient.list_one(table,{"name":args['name']})
-            if len(data) == 0:
-                return make_result(data,Code.SUCCESS,count=0)
+            data = []
+            if args['name']:
+                data = dbclient.list_one(table,{"name":args['name']})
+                data = data[0]
+            elif args['id']:
+                data = dbclient.list_one(table,{"id":args['id']})
+                data = data[0]
+            if not data:
+                return make_result(data,Code.ERROR,msg='查找数据失败')
+            return make_result(data,Code.SUCCESS)
+            # print(data[0])
         # print(len(data))
-        length = len(data)
-        data = pagenation(data,args["page"] - 1,args["limit"])
-        if data:
-            response = make_result(data,Code.SUCCESS,count=length)
-        elif data == False:
-            response = make_result(code=Code.ERROR,msg='获取数据失败')
-        return response
+        
     
     #  新增数据
     @dbclient_decorate
@@ -84,9 +93,9 @@ class Course(Resource):
         args.pop('token')
         result = dbclient.delete(table,{"id":args['id']})
         if result:
-            response = make_result(code=Code.SUCCESS)
+            response = make_result(code=Code.SUCCESS,msg='删除成功')
         else:
-            response = make_result(code=Code.ERROR)
+            response = make_result(code=Code.ERROR,msg="删除失败，可能被引用")
         return response
 
 api.add_resource(Course, '/',endpoint='course')

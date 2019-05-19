@@ -6,7 +6,7 @@ from . import parser as allParser
 from src import dbclient
 from flask import jsonify,request
 from utils.code import Code
-from utils.function import make_result, make_token, verify_token, encode_password,dbclient_decorate
+from utils.function import make_result, make_token, verify_token, encode_password,dbclient_decorate,pagenation
 
 table = 'm_user'
 api = Api(user)
@@ -27,19 +27,20 @@ class Login(Resource):
             back["name"] = m_user["name"]
             back["token"] = token["token"]
             back["role"] = m_user["role"]
+            back['id'] = m_user['id']
             response = make_result(data=back,code=Code.SUCCESS)
         else:
             response = make_result(code=Code.ERROR, msg="账户密码不一致")
         return response
     
+    @dbclient_decorate
     def get(self):
         args = allParser.getLoginParser.parse_args()
         verify_result = verify_token(args["token"])
-        if not verify_result:
-            return make_result(code=Code.ERROR, msg="token无效")
-        else:
+        if verify_result:
             return make_result(code=Code.SUCCESS, msg="成功")
-
+        else:
+            return make_result(code=Code.ERROR, msg="token无效")
 
 
 api.add_resource(Login, '/login',endpoint='userLogin')
@@ -83,22 +84,25 @@ class User(Resource):
                     "role":i['role'],
                     "class":i["class"]
                 }
-            response = make_result(m_result,code=Code.SUCCESS)
+            length = len(m_result)
+            m_result = pagenation(m_result,args["page"] - 1,args["limit"])
+            response = make_result(m_result,code=Code.SUCCESS,count=len(m_result))
         else:
-            if 'username' in args.keys():
+            if args['username']:
                 m_result = dbclient.list_one(table,{"username":args["username"]})
-                if not m_result:
+                if len(m_result) == 0:
                     return make_result(code=Code.ERROR, msg="没有该用户")
-                m_result[0].pop('endtime')
-                m_result[0].pop('token')
+                m_result = m_result[0]
+                m_result.pop('endtime')
+                m_result.pop('token')
                 response = make_result(m_result,code=Code.SUCCESS)
-            elif 'id' in args.keys():
+            elif args['id']:
                 m_result = dbclient.list_one(table,{"id":args["id"]})
                 m_result = m_result[0]
                 if not m_result:
                     return make_result(code=Code.ERROR, msg="没有该用户")
-                m_result[0].pop('endtime')
-                m_result[0].pop('token')
+                m_result.pop('endtime')
+                m_result.pop('token')
                 response = make_result(m_result,code=Code.SUCCESS)
         return response
 
@@ -111,6 +115,7 @@ class User(Resource):
         if not verify_result:
             return make_result(code=Code.ERROR, msg="token无效")
         args.pop('token')
+        # 去空
         values_keys = ['username','password','name','role']
         condition_keys = ['id']
         values = {key: value for key, value in args.items() if key in values_keys and args[key]}

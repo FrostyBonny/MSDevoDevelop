@@ -20,18 +20,28 @@ class SC(Resource):
         args.pop('token')
         if args["type"] == "all":
             data = dbclient.list_all(table)
+            length = len(data)
+            data = pagenation(data,args["page"] - 1,args["limit"])
+            if data:
+                response = make_result(data,Code.SUCCESS,count=length)
+            elif data == False:
+                response = make_result(code=Code.ERROR,msg='获取数据失败')
+            return response
         else:
-            data = dbclient.list_one(table,{"name":args['name']})
-            if len(data) == 0:
-                return make_result(data,Code.SUCCESS,count=0)
+            if args['id']:
+                data = dbclient.list_one(table,{"id":args['id']})
+                
+                data = data[0]
+                if not data:
+                    return make_result(data,Code.ERROR,msg='查询失败')                    
+            elif args['student']:
+                data = dbclient.list_one(table,{"student":args['student']})
+                if len(data) == 0:
+                    return make_result(data,Code.ERROR,msg='查询失败')
+            return make_result(data,Code.SUCCESS,msg='成功')
+            
         # print(len(data))
-        length = len(data)
-        data = pagenation(data,args["page"] - 1,args["limit"])
-        if data:
-            response = make_result(data,Code.SUCCESS,count=length)
-        elif data == False:
-            response = make_result(code=Code.ERROR,msg='获取数据失败')
-        return response
+        
     
     #  新增数据
     @dbclient_decorate

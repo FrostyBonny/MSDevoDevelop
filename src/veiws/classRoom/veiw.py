@@ -71,7 +71,6 @@ class ClassRoom(Resource):
         else:
             response = make_result(code=Code.ERROR,msg="修改失败")
         return response
-        return make_response(jsonify({"test":"Ttest"}))
 
     
     #  删除数据

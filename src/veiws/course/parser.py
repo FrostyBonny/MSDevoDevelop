@@ -2,6 +2,7 @@ from flask_restful import reqparse
 
 getParser = reqparse.RequestParser()
 getParser.add_argument('name', type=str, help='please enter name')
+getParser.add_argument('id', type=str, help='please enter id')
 getParser.add_argument('type', type=str, help='please enter type')
 getParser.add_argument('page', type=int, help='please enter page')
 getParser.add_argument('limit', type=int, help='please enter limit')
