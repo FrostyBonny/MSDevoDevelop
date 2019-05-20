@@ -33,11 +33,11 @@ class SC(Resource):
                 
                 data = data[0]
                 if not data:
-                    return make_result(data,Code.ERROR,msg='查询失败')                    
+                    return make_result(data,Code.ERROR,msg='查询失败或者没有信息')                    
             elif args['student']:
                 data = dbclient.list_one(table,{"student":args['student']})
                 if len(data) == 0:
-                    return make_result(data,Code.ERROR,msg='查询失败')
+                    return make_result(data,Code.ERROR,msg='查询失败或者没有信息')
             return make_result(data,Code.SUCCESS,msg='成功')
             
         # print(len(data))

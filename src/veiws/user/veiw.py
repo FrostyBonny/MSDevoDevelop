@@ -86,7 +86,7 @@ class User(Resource):
                 }
             length = len(m_result)
             m_result = pagenation(m_result,args["page"] - 1,args["limit"])
-            response = make_result(m_result,code=Code.SUCCESS,count=len(m_result))
+            response = make_result(m_result,code=Code.SUCCESS,count=length)
         else:
             if args['username']:
                 m_result = dbclient.list_one(table,{"username":args["username"]})
